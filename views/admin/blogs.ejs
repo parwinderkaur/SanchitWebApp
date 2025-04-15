@@ -1,0 +1,169 @@
+                <!-- begin app-main -->
+                <div class="app-main" id="main">
+                    <!-- begin container-fluid -->
+                    <div class="container-fluid">
+                        <!-- begin row -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card card-statistics">
+                                    <div class="card-body">
+                                        <div class="datatable-wrapper table-responsive">
+                                            <div class="page-title mb-2 mb-sm-0">
+                                                <h1 style="text-align: center;">Blog List</h1>
+                                            </div>
+                                            <table id="blogTable" class="table table-bordered">
+                                              <thead>
+                                                <tr>
+                                                  <th>#</th>
+                                                  <th>Title</th>
+                                                  <th>Image</th>
+                                                  <th>Date</th>
+                                                  <th>Description</th>
+                                                  <th>Status</th>
+                                                  <th>Edit</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                <% records.forEach((blog, index) => { %>
+                                                  <tr data-id="<%= blog._id %>">
+                                                    <td><%= index + 1 %></td>
+                                                    <td class="title-cell"><%= blog.title %></td>
+                                                    <td class="image-cell"><img src="/uploads/<%= blog.image %>" width="80" /></td>
+                                                    <td class="date-cell"><%= blog.dateOfPost.toISOString().slice(0,10) %></td>
+                                                    <td class="description-cell"><%= blog.description %></td>
+                                                    <td class="status-cell">
+                                                      <% if (blog.status === 1) { %>
+                                                        <span class="badge badge-success-inverse">Enabled</span>
+                                                      <% } else { %>
+                                                        <span class="badge badge-warning-inverse">Disabled</span>
+                                                      <% } %>
+                                                    </td>
+                                                    <td>
+                                                      <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
+                                                    </td>
+                                                  </tr>
+                                                                                   
+                                                <% }); %>
+                                              </tbody>
+                                            </table>                                         
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+                    </div>
+                    <!-- end container-fluid -->
+                </div>
+                <!-- end app-main -->
+                <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <form id="editForm" enctype="multipart/form-data">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Edit Blog</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                          <input type="hidden" id="editId">
+                          <div class="mb-3">
+                            <label>Title</label>
+                            <input type="text" id="editTitle" class="form-control" required>
+                          </div>
+                          <div class="mb-3">
+                            <label>Image</label>
+                            <input type="file" name="image" class="form-control" id="edit-image" required>
+                            <img id="previewImage" src="" width="100" class="mt-2" />
+                          </div>
+                          <div class="mb-3">
+                            <label>Date</label>
+                            <input type="date" id="edit-date" class="form-control" required>
+                          </div>
+                          <div class="mb-3">
+                            <label>Description</label>
+                            <textarea id="edit-description" class="form-control" required></textarea>
+                          </div>
+                          <div class="mb-3">
+                            <label>Status</label>
+                            <select id="edit-status" class="form-control">
+                              <option value="1">Enabled</option>
+                              <option value="0">Disabled</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="submit" class="btn btn-success">Update</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <script>
+                  document.addEventListener("DOMContentLoaded", function () {
+                    document.querySelectorAll(".btn-primary").forEach(btn => {
+                      btn.addEventListener("click", function () {
+                        const row = this.closest("tr");
+                        const id = row.dataset.id;
+                        const statusTexttitle = row.querySelector(".title-cell").textContent.trim();
+                        const image = row.querySelector(".image-cell img").getAttribute("src");
+                        const date = row.querySelector(".date-cell").textContent.trim();
+                        const description = row.querySelector(".description-cell").textContent.trim();
+                        const statusText = row.querySelector(".status-cell").textContent.trim();
+                console.log("======id=====",id)
+                console.log("======statusTexttitle=====",statusTexttitle)
+                console.log("======image=====",image)
+                console.log("======date=====",date)
+                console.log("======description=====",description)
+                console.log("======statusText=====",statusText)
+                        document.getElementById("editId").value = id;
+                        document.getElementById("editTitle").value = statusTexttitle;
+                        document.getElementById("previewImage").src = image;
+                        document.getElementById("edit-date").value = date;
+                        document.getElementById("edit-description").value = description;
+                        document.getElementById("edit-status").value = statusText === "Enabled" ? "1" : "0";
+                      });
+                    });
+                
+                    document.getElementById("editForm").addEventListener("submit", async function (e) {
+                      e.preventDefault();
+                      const id = document.getElementById("editId").value;
+                      
+                      const formData = new FormData();
+                      formData.append("title", document.getElementById("editTitle").value);
+                      formData.append("dateOfPost", document.getElementById("edit-date").value);
+                      formData.append("description", document.getElementById("edit-description").value);
+                      formData.append("status", document.getElementById("edit-status").value);
+                  
+                      const imageFile = document.getElementById("edit-image").files[0];
+                      if (imageFile) formData.append("image", imageFile);
+
+                      const modalEl = document.getElementById('editModal');
+                      const modal = bootstrap.Modal.getInstance(modalEl);
+                      modal.hide();
+                      const res = await fetch(`/api/blogs/${id}`, {
+                        method: "POST",
+                        body: formData
+                      });
+                
+                      const json = await res.json();
+                      if (json.success) {
+                        const flash = document.createElement("div");
+                        flash.className = "alert alert-success flash-msg";
+                        flash.innerText = json.message;
+                        document.querySelector(".container-fluid").prepend(flash);               
+                        setTimeout(() => {
+                          flash.remove();
+                          location.reload();
+                        }, 1500);
+                      } else {
+                        const flash = document.createElement("div");
+                        flash.className = "alert alert-denger flash-msg";
+                        flash.innerText = json.message;
+                        document.querySelector(".container-fluid").prepend(flash);               
+                        setTimeout(() => {
+                          flash.remove();
+                        }, 1500);
+                      }
+                    });
+                  });
+                </script>                

@@ -1,0 +1,101 @@
+<div class="app-main" id="main">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <div class="card card-statistics">
+                    <div class="card-body">
+                        <h3 class="text-center mb-4">Site Settings</h3>
+                        <div class="container-fluid">
+                            <form id="settingsForm" enctype="multipart/form-data">
+                                <input type="hidden" name="id" value="<%= records._id %>" />
+                              <div class="row">
+                                <div class="col-md-6 mb-3">
+                                  <label>Primary Color</label>
+                                  <input type="color" name="primaryColor" class="form-control" value="<%= records.primaryColor %>" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                  <label>Accent Color</label>
+                                  <input type="color" name="accentColor" class="form-control" value="<%= records.accentColor %>" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                  <label>Text Dark Color</label>
+                                  <input type="color" name="textDarkColor" class="form-control" value="<%= records.textDarkColor %>" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                  <label>Text Light Color</label>
+                                  <input type="color" name="textLightColor" class="form-control" value="<%= records.textLightColor %>" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                  <label>Email</label>
+                                  <input type="email" name="email" class="form-control" value="<%= records.email %>" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                  <label>Phone Number</label>
+                                  <input type="text" name="number" class="form-control" value="<%= records.number %>" />
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                  <label>Address</label>
+                                  <textarea name="address" class="form-control"><%= records.address %></textarea>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                  <label>Instagram</label>
+                                  <input type="text" name="instagramLink" class="form-control" value="<%= records.instagramLink %>" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                  <label>WhatsApp</label>
+                                  <input type="text" name="whatsappLink" class="form-control" value="<%= records.whatsappLink %>" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                  <label>Facebook</label>
+                                  <input type="text" name="facebookLink" class="form-control" value="<%= records.facebookLink %>" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                  <label>What We Provide</label>
+                                  <input type="text" name="whatWeProvide" class="form-control" value="<%= records.whatWeProvide %>" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                  <label>Logo Image</label><br>
+                                  <% if (records.logoImage) { %>
+                                    <img src="/uploads/<%= records.logoImage %>" class="mt-2" width="120" />
+                                  <% } %>
+                                  <br><br>
+                                  <input type="file" name="logoImage" class="form-control" />
+                                </div>
+                                <div class="col-12 text-center">
+                                  <button type="submit" class="btn btn-success mt-3">Save Settings</button>
+                                </div>
+                              </div>
+                            </form>
+                        </div>                          
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById("settingsForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+    
+      const form = e.target;
+      const formData = new FormData(form);
+    console.log("========formData=========",formData)
+      const res = await fetch(`/api/settings`, {
+        method: "POST",
+        body: formData
+      });
+    
+      const json = await res.json();
+    
+      const flash = document.createElement("div");
+      flash.className = `alert alert-${json.success ? "success" : "danger"} flash-msg`;
+      flash.innerText = json.message;
+      document.querySelector(".container-fluid").prepend(flash);
+    
+      setTimeout(() => {
+        flash.remove();
+        if (json.success) location.reload();
+      }, 1500);
+    });
+    </script>
+    

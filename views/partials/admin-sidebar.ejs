@@ -1,0 +1,48 @@
+<!-- begin app-nabar -->
+                <aside class="app-navbar">
+                    <div class="sidebar-nav scrollbar scroll_dark">
+                      <a href="/admin" aria-expanded="false" id="admin-logo">
+                        <img src="/media/logo.png" alt="logo" />
+                      </a>                      
+                      <ul class="metismenu" id="sidebarNav">
+                        <li class="<%= currentUrl === '/admin' ? 'active' : '' %>">
+                          <a href="/admin"><span class="nav-title">Admin Dashboard</span></a>
+                        </li>
+
+                        <li class="nav-static-title"><h5>Website Content</h5></li>
+                      
+                        <li class="<%= currentUrl === '/admin/home' ? 'active' : '' %>">
+                          <a href="/admin/home"><span class="nav-title">Home Section</span></a>
+                        </li>
+                      
+                        <li class="<%= currentUrl === '/admin/services' ? 'active' : '' %>">
+                          <a href="/admin/services"><span class="nav-title">Services Section</span></a>
+                        </li>
+                      
+                        <li class="<%= currentUrl === '/admin/blogs' ? 'active' : '' %>">
+                          <a href="/admin/blogs"><span class="nav-title">Blogs Section</span></a>
+                        </li>
+                      
+                        <li class="<%= currentUrl === '/admin/testimonials' ? 'active' : '' %>">
+                          <a href="/admin/testimonials"><span class="nav-title">Testimonials</span></a>
+                        </li>
+                      
+                        <li class="<%= currentUrl === '/admin/faq' ? 'active' : '' %>">
+                          <a href="/admin/faq"><span class="nav-title">FAQs</span></a>
+                        </li>
+                      
+                        <li class="<%= currentUrl === '/admin/setting' ? 'active' : '' %>">
+                          <a href="/admin/setting"><span class="nav-title">Setting</span></a>
+                        </li>
+                      
+                      </ul>
+                      
+                      <a href="/admin/logout" style="text-decoration: none;">
+                        <div class="sidebar-banner p-4 bg-gradient text-center m-3 d-block rounded">
+                          Log Out
+                        </div>
+                      </a>
+                                        </div>
+                  </aside>
+                  
+                <!-- end app-navbar -->

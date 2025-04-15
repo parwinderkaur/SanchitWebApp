@@ -1,0 +1,160 @@
+                <!-- begin app-main -->
+                <div class="app-main" id="main">
+                    <!-- begin container-fluid -->
+                    <div class="container-fluid">
+                        <!-- begin row -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card card-statistics">
+                                    <div class="card-body">
+                                        <div class="datatable-wrapper table-responsive">
+                                            <div class="page-title mb-2 mb-sm-0">
+                                                <h1 style="text-align: center;">Home Section List</h1>
+                                            </div>
+                                            <div class="container-fluid">
+                                                <table id="homeTable" class="table table-bordered">
+                                                  <thead>
+                                                    <tr>
+                                                      <th>#</th>
+                                                      <th>Title</th>
+                                                      <th>Paragraph No</th>
+                                                      <th>Description</th>
+                                                      <th>Image</th>
+                                                      <th>Status</th>
+                                                      <th>Edit</th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                    <% records.forEach((section, index) => { %>
+                                                      <tr data-id="<%= section._id %>">
+                                                        <td><%= index + 1 %></td>
+                                                        <td class="title-cell"><%= section.title %></td>
+                                                        <td class="para-cell"><%= section.paragraphNo %></td>
+                                                        <td class="description-cell"><%= section.description %></td>
+                                                        <td class="image-cell">
+                                                          <img src="/uploads/<%= section.image %>" width="80" />
+                                                        </td>
+                                                        <td class="status-cell">
+                                                          <% if (section.status === 1) { %>
+                                                            <span class="badge badge-success-inverse">Enabled</span>
+                                                          <% } else { %>
+                                                            <span class="badge badge-warning-inverse">Disabled</span>
+                                                          <% } %>
+                                                        </td>
+                                                        <td>
+                                                          <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editHomeModal">Edit</button>
+                                                        </td>
+                                                      </tr>
+                                                    <% }); %>
+                                                  </tbody>
+                                                </table>
+                                              </div>
+                                              
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+                    </div>
+                    <!-- end container-fluid -->
+                </div>
+                <!-- end app-main -->
+                <div class="modal fade" id="editHomeModal" tabindex="-1" aria-labelledby="editHomeLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <form id="editHomeForm" enctype="multipart/form-data">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Edit Home Section</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                          </div>
+                          <div class="modal-body">
+                            <input type="hidden" id="editHomeId">
+                            <div class="mb-3">
+                              <label>Title</label>
+                              <input type="text" id="editHomeTitle" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                              <label>Paragraph No</label>
+                              <input type="number" id="editHomePara" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                              <label>Description</label>
+                              <textarea id="editHomeDescription" class="form-control" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                              <label>Image</label>
+                              <input type="file" name="image" class="form-control" id="editHomeImage">
+                              <img id="previewHomeImage" src="" class="mt-2" width="100" />
+                            </div>
+                            <div class="mb-3">
+                              <label>Status</label>
+                              <select id="editHomeStatus" class="form-control">
+                                <option value="1">Enabled</option>
+                                <option value="0">Disabled</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Update</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  <script>
+                    document.addEventListener("DOMContentLoaded", () => {
+                      document.querySelectorAll("#homeTable .btn-primary").forEach(btn => {
+                        btn.addEventListener("click", function () {
+                          const row = this.closest("tr");
+                          const id = row.dataset.id;
+                          const title = row.querySelector(".title-cell").textContent.trim();
+                          const para = row.querySelector(".para-cell").textContent.trim();
+                          const description = row.querySelector(".description-cell").textContent.trim();
+                          const image = row.querySelector(".image-cell img").getAttribute("src");
+                          const statusText = row.querySelector(".status-cell").textContent.trim();
+                    
+                          document.getElementById("editHomeId").value = id;
+                          document.getElementById("editHomeTitle").value = title;
+                          document.getElementById("editHomePara").value = para;
+                          document.getElementById("editHomeDescription").value = description;
+                          document.getElementById("previewHomeImage").src = image;
+                          document.getElementById("editHomeStatus").value = statusText === "Enabled" ? "1" : "0";
+                        });
+                      });
+                    
+                      document.getElementById("editHomeForm").addEventListener("submit", async function (e) {
+                        e.preventDefault();
+                        const id = document.getElementById("editHomeId").value;
+                    
+                        const formData = new FormData();
+                        formData.append("title", document.getElementById("editHomeTitle").value);
+                        formData.append("paragraphNo", document.getElementById("editHomePara").value);
+                        formData.append("description", document.getElementById("editHomeDescription").value);
+                        formData.append("status", document.getElementById("editHomeStatus").value);
+                    
+                        const imageFile = document.getElementById("editHomeImage").files[0];
+                        if (imageFile) formData.append("image", imageFile);
+                    
+                        const modalEl = document.getElementById("editHomeModal");
+                        const modal = bootstrap.Modal.getInstance(modalEl);
+                        modal.hide();
+                    
+                        const res = await fetch(`/api/home-sections/${id}`, {
+                          method: "POST",
+                          body: formData
+                        });
+                    
+                        const json = await res.json();
+                        const flash = document.createElement("div");
+                        flash.className = `alert alert-${json.success ? "success" : "danger"} flash-msg`;
+                        flash.innerText = json.message;
+                        document.querySelector(".container-fluid").prepend(flash);
+                        setTimeout(() => {
+                          flash.remove();
+                          if (json.success) location.reload();
+                        }, 1500);
+                      });
+                    });
+                    </script>
+                                      

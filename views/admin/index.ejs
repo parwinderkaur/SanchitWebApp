@@ -1,0 +1,98 @@
+<!-- begin app-main -->
+                <div class="app-main" id="main">
+                    <!-- begin container-fluid -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-6 col-xxl-3 m-b-30">
+                              <div class="card card-statistics h-100 m-b-0 bg-pink" onclick="window.location.href='/admin/services'" style="cursor: pointer;">
+                                <div class="card-body">
+                                  <h2 class="text- mb-0"><%= records.counts.services %></h2>
+                                  <p class="text-">Total Services</p>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="col-xs-6 col-xxl-3 m-b-30">
+                              <div class="card card-statistics h-100 m-b-0 bg-primary" onclick="window.location.href='/admin/blogs'" style="cursor: pointer;">
+                                <div class="card-body">
+                                  <h2 class="text- mb-0"><%= records.counts.blogs %></h2>
+                                  <p class="text-">Total Blogs</p>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="col-xs-6 col-xxl-3 m-b-30">
+                              <div class="card card-statistics h-100 m-b-0 bg-orange" onclick="window.location.href='/admin/faq'" style="cursor: pointer;">
+                                <div class="card-body">
+                                  <h2 class="text- mb-0"><%= records.counts.faqs %></h2>
+                                  <p class="text-">Total FAQs</p>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="col-xs-6 col-xxl-3 m-b-30">
+                              <div class="card card-statistics h-100 m-b-0 bg-info" onclick="window.location.href='/admin/testimonials'" style="cursor: pointer;">
+                                <div class="card-body">
+                                  <h2 class="text- mb-0"><%= records.counts.testimonials %></h2>
+                                  <p class="text-">Total Testimonials</p>
+                                </div>
+                              </div>
+                            </div>
+
+                        </div>
+                        <!-- begin row -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card card-statistics">
+                                    <div class="card-body">
+                                        <div class="datatable-wrapper table-responsive">
+                                            <div class="page-title mb-2 mb-sm-0">
+                                                <h1 style="text-align: center;">User Enquires</h1>
+                                            </div>
+                                            <table id="enquiryTable" class="display compact table table-striped table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                      <th>Name</th>
+                                                      <th>Email</th>
+                                                      <th>Contact</th>
+                                                      <th>Message</th>
+                                                      <th>Date & Time</th>
+                                                      <th>WhatsApp</th>
+                                                    </tr>
+                                                </thead>
+                                                 <tbody>
+                                                    <% records.enquiries.forEach((enquiry, index) => { 
+                                                         const createdAt = new Date(enquiry.createdAt);
+                                                         const dateTime = createdAt.toLocaleString('en-IN', {
+                                                           dateStyle: 'medium',
+                                                           timeStyle: 'short'
+                                                         });
+                                                         const whatsappLink = `https://wa.me/91${enquiry.contact}?text=Namaste%20${encodeURIComponent(enquiry.name)},%20thank%20you%20for%20reaching%20out%20to%20Crystals%20Healing%20Vibes!%20How%20may%20i%20help%20you.`;
+                                                    %>
+                                                      <tr>
+                                                        <td><%= index + 1 %></td>
+                                                        <td><%= enquiry.name %></td>
+                                                        <td><%= enquiry.email %></td>
+                                                        <td><%= enquiry.contact %></td>
+                                                        <td><%= enquiry.message %></td>
+                                                        <td><%= dateTime %></td>
+                                                        <td>
+                                                          <a href="<%= whatsappLink %>" target="_blank" style="background: #25D366; padding: 6px 10px; border-radius: 5px; text-decoration: none;">
+                                                            Send Greeting
+                                                          </a>
+                                                        </td>
+                                                      </tr>
+                                                    <% }) %>
+                                                  </tbody>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+                    </div>
+                    <!-- end container-fluid -->
+                </div>
+                <!-- end app-main -->
+      
