@@ -4,8 +4,6 @@ const Blog = require("../models/Blog");
 const Service = require("../models/Service");
 const Home = require("../models/HomeSection");
 const Setting = require("../models/Setting");
-const Enquiry = require("../models/Contact");
-
 const moment = require('moment');
 const Contact = require("../models/Contact");
 
@@ -16,9 +14,9 @@ module.exports = {
     try {
       const [settings, sections, faqs, testimonials] = await Promise.all([
         Setting.findOne().lean(),
-        Home.find().lean(),
-        Faq.find().lean(),
-        Testimonial.find().lean()
+        Home.find({ status: 1 }).lean(),
+        Faq.find({ status: 1 }).lean(),
+        Testimonial.find({ status: 1 }).lean()
       ]);
       console.log("===settings===========",settings)
       console.log("===sections===========",sections)
@@ -171,32 +169,32 @@ module.exports = {
 
   // ===== API Functions (as is, for frontend AJAX etc.) =====
   getAllFaqs: async (req, res) => {
-    const faqs = await Faq.find();
+    const faqs = await Faq.find({ status: 1 });
     res.json(faqs);
   },
 
   getAllTestimonials: async (req, res) => {
-    const testimonials = await Testimonial.find();
+    const testimonials = await Testimonial.find({ status: 1 });
     res.json(testimonials);
   },
 
   getAllBlogs: async (req, res) => {
-    const blogs = await Blog.find();
+    const blogs = await Blog.find({ status: 1 });
     res.json(blogs);
   },
 
   getAllServices: async (req, res) => {
-    const services = await Service.find();
+    const services = await Service.find({ status: 1 });
     res.json(services);
   },
 
   getAllHomeSections: async (req, res) => {
-    const home = await Home.find();
+    const home = await Home.find({ status: 1 });
     res.json(home);
   },
 
   getAllSettings: async (req, res) => {
-    const settings = await Setting.find();
+    const settings = await Setting.find({ status: 1 });
     res.json(settings);
   }
 };
