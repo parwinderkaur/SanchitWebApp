@@ -13,12 +13,21 @@
 
   <!-- All CSS files -->
   <style>
+  /* primaryColor: '#fff7ad',
+  secondaryColor: '#8B0000',
+  tertiaryColor: '#FFF8DC',
+  textColor: '#000000',
+  logoImage: '503e2ff13f10eae286312ae25388f7d7',
+  accentColor: '#ffa9f9',
+  textDarkColor: '#000000',
+  textLightColor: '#ff00ed' */
+
     :root {
-      --bg-color: #ffa9f9;
-      --primary-color: #fff7ad;
-      --accent-color: #fff0d0;
-      --text-light: #ff00ed;
-      --text-dark: black;
+      --bg-color: <%= settings.accentColor %>;
+      --primary-color: <%= settings.primaryColor %>;
+      --accent-color: <%= settings.tertiaryColor %>;
+      --text-light: <%= settings.textLightColor %>;
+      --text-dark:<%= settings.textDarkColor %>;
     }
   </style>
   <link rel="stylesheet" href="/css/vendor/font-awesome.css">

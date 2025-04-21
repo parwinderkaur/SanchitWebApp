@@ -376,12 +376,19 @@ p {
 }
 
 .subtitle {
-  font-size: clamp(11px, 0.625vw, 28px);
+  font-size: small;
   /* 12px */
   font-family: "Lato", sans-serif;
   font-style: normal;
-  font-weight: 400;
+  font-weight: bold;
   line-height: 120%;
+}
+.clamp-2-lines {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limit to 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .caption {
@@ -416,14 +423,15 @@ strong {
   transition: all 0.3s ease-in-out;
 }
 .hover-content:hover {
-  color: var(--accent-color) !important;
+  font-weight: bold;
+  /* color: var(--text-light) !important; */
 }
 
 /*-------------------------
 Helpers
 -------------------------*/
 .color-primary {
-  color: var(--accent-color) !important;
+  color: var(--text-dark) !important;
 }
 
 .color-sec {
@@ -1446,7 +1454,7 @@ Elements
 }
 .cus-btn-3 .text {
   color: var(--text-dark);
-  font-size: clamp(12px, 0.833vw, 32px);
+  font-size: large;
   font-weight: 500;
   font-family: "Lato", sans-serif;
 }
@@ -2575,7 +2583,12 @@ img.w-100{
   padding-bottom: 0;
 }
 .footer ul li a:hover {
-  color: var(--accent-color);
+  font-weight: bold;
+  /* color: var(--text-light); */
+}
+a:hover {
+  font-weight: bold !important;
+  /* color: var(--text-light); */
 }
 .footer .social-icons {
   display: flex;
@@ -2794,6 +2807,31 @@ img.w-100{
   color: var(--text-dark);
   transition: all 0.3s ease-in-out;
 }
+.svg-block {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+}
+
+.svg-block svg {
+  width: 100px;
+  height: auto;
+}
+
+.svg-block .price {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+  color: var(--text-light);
+}
+/* .price{
+  
+  text-align: end;
+} */
+
 .sidebar .tags-block .tag:hover {
   background-color: var(--accent-color);
   color: var(--text-dark);
@@ -3033,7 +3071,12 @@ img.w-100{
   background-color: var(--accent-color);
   transition: all 0.3s ease-in-out;
 }
-.service-sec .service-block .svg-block svg {
+a.btn.btn-success.btn-sm {
+  margin-top: 20px;
+  width: -webkit-fill-available;
+  padding: 10px;
+}
+.service-sec .service-block .svg-block svg,#service_img {
   transition: all 0.3s ease-in-out;
   width: clamp(48px, 6.345vw, 164px);
   height: clamp(48px, 6.667vw, 174px);
@@ -3095,6 +3138,13 @@ img.w-100{
 }
 .service-detail-sec .other-services-block:hover, .service-detail-sec .other-services-block.active {
   background-color: var(--accent-color);
+  font-weight: bold;
+}
+section.blog-detail-sec.mb-80 p {
+  font-size: clamp(18px, 0.833vw, 32px);
+}
+section.service-detail-sec.mb-80 p {
+  font-size: clamp(18px, 0.833vw, 32px);
 }
  .service-detail-sec .other-services-block.active span {
   font-weight: 700;
@@ -3372,7 +3422,7 @@ img.w-100{
   position: absolute;
   right: 0px;
   font-weight: 400;
-  color: var(--accent-color);
+  color: var(--text-light);
   font-size: clamp(8px, 0.833vw, 32px);
   cursor: pointer;
   padding-left: 12px;

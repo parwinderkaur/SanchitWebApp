@@ -1,9 +1,8 @@
-<!-- title banner start -->
+        <!-- title banner start -->
         <div class="row title-banner mb-80">
             <div class="container-fluid">
                 <div class="banner-wrapper">
-                    <img class="br-32 w-100" src="/media/images/title-banner.jpg" alt="" >
-                    
+                    <img class="br-32 w-100" src="/media/images/title-banner.jpg" alt="" >      
                     <h2 class="wrapper-content">Blogs</h2>
                 </div>
             </div>
@@ -18,201 +17,25 @@
                     <h3 class="fw-500">Our Latest Insights</h3>
                 </div>
                 <div class="row row-gap-4 mb-36">
-                    <div class="col-md-4 col-sm-6">
-                        <div class="blog-card">
-                            <a href="/blog-detail" class="card-img">
-                                <img src="/media/blogs/blog-1.jpg" alt="">
-                            </a>
-                            <div class="card-content">
-                                <p class=" mb-4p">June 01, 2025</p>
-                                <a href="/blog-detail" class="fw-700 h5 mb-12">Personal Palm Reading</a>
-                                <p class="light-gray mb-20">Lectus nisi quam tellus in eu elementum. Tempus lorem arcu
-                                    quis diam at.
-                                    Massa lacus at
-                                    morbi vel curabitur sed vitae.</p>
-                                <div class="text-end">
-                                    <a href="/blog-detail"
-                                        class="text-18 hover-content text-decoration-underline">See Details</a>
+                    <% blogs.forEach((item, i) => { %>
+                        <div class="col-md-4 col-sm-6">
+                            <div class="blog-card">
+                                <a href="/blog-detail/<%= item._id %>" class="card-img">
+                                    <img src="<%= item.image %>" alt="">
+                                </a>
+                                <div class="card-content">
+                                    <p class=" mb-4p"><%= moment(item.dateOfPost).format("DD MMM YYYY") %></p>
+                                    <a href="/blog-detail/<%= item._id %>" class="fw-700 h5 mb-12"><%= item.title %></a>
+                                    <p class="light-gray mb-20 clamp-2-lines"><%= item.description %></p>
+                                    <div class="text-end">
+                                        <a href="/blog-detail/<%= item._id %>"
+                                            class="text-18 hover-content text-decoration-underline">See Details</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="blog-card">
-                            <a href="/blog-detail" class="card-img">
-                                <img src="/media/blogs/blog-2.jpg" alt="blog-2.jpg">
-                            </a>
-                            <div class="card-content">
-                                <p class=" mb-4p">June 03, 2025</p>
-                                <a href="/blog-detail" class="fw-700 h5 mb-12">Cosmic Insight Chronicles</a>
-                                <p class="light-gray mb-20">Aries individuals are known for their energetic and
-                                    assertive nature, making
-                                    bold and dynamic outfits a perfect match.
-                                </p>
-                                <div class="text-end">
-                                    <a href="/blog-detail"
-                                        class="text-18 hover-content text-decoration-underline">See Details</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="blog-card">
-                            <a href="/blog-detail" class="card-img">
-                                <img src="/media/blogs/blog-3.jpg" alt="">
-                            </a>
-                            <div class="card-content">
-                                <p class=" mb-4p">June 03, 2025</p>
-                                <a href="/blog-detail" class="fw-700 h5 mb-12">Self-Growth with Astrology</a>
-                                <p class="light-gray mb-20">Incorporate astrology into everyday activities, from
-                                    planning your day
-                                    around the moon phase to using planetary.</p>
-                                <div class="text-end">
-                                    <a href="/blog-detail"
-                                        class="text-18 hover-content text-decoration-underline">See Details</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="blog-card">
-                            <a href="/blog-detail" class="card-img">
-                                <img src="/media/blogs/blog-4.jpg" alt="">
-                            </a>
-                            <div class="card-content">
-                                <p class=" mb-4p">June 01, 2025</p>
-                                <a href="/blog-detail" class="fw-700 h5 mb-12">Personal Palm Reading</a>
-                                <p class="light-gray mb-20">Lectus nisi quam tellus in eu elementum. Tempus lorem arcu
-                                    quis diam at.
-                                    Massa lacus at
-                                    morbi vel curabitur sed vitae.</p>
-                                <div class="text-end">
-                                    <a href="/blog-detail"
-                                        class="text-18 hover-content text-decoration-underline">See Details</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="blog-card">
-                            <a href="/blog-detail" class="card-img">
-                                <img src="/media/blogs/blog-5.jpg" alt="blog-2.jpg">
-                            </a>
-                            <div class="card-content">
-                                <p class=" mb-4p">June 03, 2025</p>
-                                <a href="/blog-detail" class="fw-700 h5 mb-12">Cosmic Insight Chronicles</a>
-                                <p class="light-gray mb-20">Aries individuals are known for their energetic and
-                                    assertive nature, making
-                                    bold and dynamic outfits a perfect match.
-                                </p>
-                                <div class="text-end">
-                                    <a href="/blog-detail"
-                                        class="text-18 hover-content text-decoration-underline">See Details</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="blog-card">
-                            <a href="/blog-detail" class="card-img">
-                                <img src="/media/blogs/blog-6.jpg" alt="">
-                            </a>
-                            <div class="card-content">
-                                <p class=" mb-4p">June 03, 2025</p>
-                                <a href="/blog-detail" class="fw-700 h5 mb-12">Self-Growth with Astrology</a>
-                                <p class="light-gray mb-20">Incorporate astrology into everyday activities, from
-                                    planning your day
-                                    around the moon phase to using planetary.</p>
-                                <div class="text-end">
-                                    <a href="/blog-detail"
-                                        class="text-18 hover-content text-decoration-underline">See Details</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="blog-card">
-                            <a href="/blog-detail" class="card-img">
-                                <img src="/media/blogs/blog-7.jpg" alt="blog-2.jpg">
-                            </a>
-                            <div class="card-content">
-                                <p class=" mb-4p">June 03, 2025</p>
-                                <a href="/blog-detail" class="fw-700 h5 mb-12">Cosmic Insight Chronicles</a>
-                                <p class="light-gray mb-20">Aries individuals are known for their energetic and
-                                    assertive nature, making
-                                    bold and dynamic outfits a perfect match.
-                                </p>
-                                <div class="text-end">
-                                    <a href="/blog-detail"
-                                        class="text-18 hover-content text-decoration-underline">See Details</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="blog-card">
-                            <a href="/blog-detail" class="card-img">
-                                <img src="/media/blogs/blog-8.jpg" alt="">
-                            </a>
-                            <div class="card-content">
-                                <p class=" mb-4p">June 03, 2025</p>
-                                <a href="/blog-detail" class="fw-700 h5 mb-12">Self-Growth with Astrology</a>
-                                <p class="light-gray mb-20">Incorporate astrology into everyday activities, from
-                                    planning your day
-                                    around the moon phase to using planetary.</p>
-                                <div class="text-end">
-                                    <a href="/blog-detail"
-                                        class="text-18 hover-content text-decoration-underline">See Details</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="blog-card">
-                            <a href="/blog-detail" class="card-img">
-                                <img src="/media/blogs/blog-9.jpg" alt="">
-                            </a>
-                            <div class="card-content">
-                                <p class=" mb-4p">June 01, 2025</p>
-                                <a href="/blog-detail" class="fw-700 h5 mb-12">Personal Palm Reading</a>
-                                <p class="light-gray mb-20">Lectus nisi quam tellus in eu elementum. Tempus lorem arcu
-                                    quis diam at.
-                                    Massa lacus at
-                                    morbi vel curabitur sed vitae.</p>
-                                <div class="text-end">
-                                    <a href="/blog-detail"
-                                        class="text-18 hover-content text-decoration-underline">See Details</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <% }) %>
                 </div>
-                <!-- <div class="pagination">
-                    <ul id="border-pagination">
-                        <li>
-                            <a class="" href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="20" viewBox="0 0 12 20"
-                                    fill="none">
-                                    <path
-                                        d="M10.9815 0.655761C11.3222 0.996532 11.3223 1.54914 10.9814 1.88997L2.87127 9.99994L10.9815 18.1103C11.3222 18.4511 11.3223 19.0037 10.9814 19.3445C10.6406 19.6854 10.088 19.6854 9.7472 19.3445L1.01992 10.617C0.856257 10.4534 0.764331 10.2314 0.764331 9.99994C0.764331 9.76849 0.856316 9.54647 1.01998 9.38286L9.74726 0.655819C10.088 0.314932 10.6406 0.314932 10.9815 0.655761Z"
-                                        fill="#FAFAFA" />
-                                </svg>
-                            </a>
-                        </li>
-                        <li><a href="#" class="active">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="20" viewBox="0 0 12 20"
-                                    fill="none">
-                                    <path
-                                        d="M1.01853 0.655761C0.677761 0.996532 0.677703 1.54914 1.01859 1.88997L9.12873 9.99994L1.01853 18.1103C0.677761 18.4511 0.677703 19.0037 1.01859 19.3445C1.35942 19.6854 1.91197 19.6854 2.2528 19.3445L10.9801 10.617C11.1437 10.4534 11.2357 10.2314 11.2357 9.99994C11.2357 9.76849 11.1437 9.54647 10.98 9.38286L2.25274 0.655819C1.91197 0.314932 1.35936 0.314932 1.01853 0.655761Z"
-                                        fill="#FAFAFA" />
-                                </svg>
-                            </a>
-                        </li>
-                    </ul>
-                </div> -->
             </div>
         </section>
         <!-- Blog Section End -->

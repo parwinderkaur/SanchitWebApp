@@ -30268,7 +30268,13 @@
 }
  .table>tbody>tr>td{
   vertical-align:middle;
-  white-space:nowrap;
+  /* white-space:nowrap; */
+}
+.description-cell {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
  .tabledit-toolbar{
   flex-wrap:nowrap;

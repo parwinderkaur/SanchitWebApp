@@ -1,15 +1,17 @@
 const mongoose = require('mongoose');
 
 const settingSchema = new mongoose.Schema({
-  bgColor:String,
   primaryColor: String,
+  secondaryColor: String,
+  tertiaryColor: String,
+  textColor: String,
+  logoImage: String,
   accentColor: String,
   textDarkColor: String,
   textLightColor: String,
-  logoImage: String,
   email: String,
   number: String,
-  address: String,
+address: String,
   instagramLink: String,
   whatsappLink: String,
   facebookLink: String,

@@ -30,9 +30,12 @@
                                                         <td><%= index + 1 %></td>
                                                         <td class="title-cell"><%= section.title %></td>
                                                         <td class="para-cell"><%= section.paragraphNo %></td>
-                                                        <td class="description-cell"><%= section.description %></td>
+                                                        <td class="description-cell" data-bs-toggle="tooltip" title="<%= section.description %>">
+                                                          <%= section.description.length > 100 ? section.description.substring(0, 100) + '...' : section.description %>
+                                                        </td>
+                                                                                                             
                                                         <td class="image-cell">
-                                                          <img src="/uploads/<%= section.image %>" width="80" />
+                                                          <img src="<%= section.image %>" width="80" />
                                                         </td>
                                                         <td class="status-cell">
                                                           <% if (section.status === 1) { %>
@@ -49,7 +52,6 @@
                                                   </tbody>
                                                 </table>
                                               </div>
-                                              
                                         </div>
                                     </div>
                                 </div>

@@ -29,9 +29,11 @@
                                                       <tr data-id="<%= service._id %>">
                                                         <td><%= index + 1 %></td>
                                                         <td class="title-cell"><%= service.title %></td>
-                                                        <td class="description-cell"><%= service.description %></td>
-                                                        <td class="price-cell"><%= service.price %></td>
-                                                        <td class="image-cell"><img src="/uploads/<%= service.image %>" width="80"></td>
+                                                        <td class="description-cell" data-bs-toggle="tooltip" title="<%= service.description %>">
+                                                          <%= service.description.length > 100 ? service.description.substring(0, 100) + '...' : service.description %>
+                                                        </td>                                                             
+                                                       <td class="price-cell"><%= service.price %></td>
+                                                        <td class="image-cell"><img src="<%= service.image %>" width="80"></td>
                                                         <td class="status-cell">
                                                           <% if (service.status === 1) { %>
                                                             <span class="badge badge-success-inverse">Enabled</span>

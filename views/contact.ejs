@@ -26,7 +26,7 @@
                                 <h3 class="fw-700 mb-8">Get in touch</h3>
                                 <p>Our friendly team would love to hear from you.</p>
                             </div>
-                            <form class="contact-form" method="post">
+                            <form id="submitContactForm" class="contact-form" method="post">
                                 <div class="mb-16">
                                     <p class="subtitle mb-4p ">Name </p>
                                     <input type="text" name="name" id="fname" class="form-control" required
@@ -44,7 +44,7 @@
                                 </div>
                                 <div class="mb-16">
                                     <p class="subtitle mb-4p ">Message</p>
-                                    <textarea name="message" id="message1" class="form-control"></textarea>
+                                    <textarea name="message" id="message1" class="form-control" required></textarea>
                                 </div>
                                 <button type="submit" class="cus-btn-3 w-100"><span class="text">Submit</span></button>
                                 <div id="message" class="alert-msg"></div>
@@ -76,7 +76,7 @@
                                     </defs>
                                 </svg>
                             </div>
-                            <a href="tel:+919783395556" class="h5 fw-500 hover-content">+91 97833 95556</a>
+                            <a href="tel:<%= settings.number %>" class="h5 fw-500 hover-content"><%= settings.number %></a>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6">
@@ -92,7 +92,7 @@
                                         fill="#8400D4" />
                                 </svg>
                             </div>
-                            <h5 class="fw-500">Jaipur, India</h5>
+                            <h5 class="fw-500"><%= settings.address %></h5>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-12">
@@ -112,7 +112,7 @@
                                     </defs>
                                 </svg>
                             </div>
-                            <a href="mailto:sanchit@crystalshealingvibes.com" class="h5 fw-500 hover-content">sanchit@crystalshealingvibes.com</a>
+                            <a href="mailto:<%= settings.email %>" class="h5 fw-500 hover-content"><%= settings.email %></a>
                         </div>
                     </div>
                 </div>

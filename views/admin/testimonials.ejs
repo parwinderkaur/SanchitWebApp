@@ -27,7 +27,9 @@
                                                       <tr data-id="<%= testimonial._id %>">
                                                         <td><%= index + 1 %></td>
                                                         <td class="user-cell"><%= testimonial.userName %></td>
-                                                        <td class="description-cell"><%= testimonial.description %></td>
+                                                        <td class="description-cell" data-bs-toggle="tooltip" title="<%= testimonial.description %>">
+                                                          <%= testimonial.description.length > 100 ? testimonial.description.substring(0, 100) + '...' : testimonial.description %>
+                                                        </td>                                                                                                              
                                                         <td class="status-cell">
                                                           <% if (testimonial.status === 1) { %>
                                                             <span class="badge badge-success-inverse">Enabled</span>

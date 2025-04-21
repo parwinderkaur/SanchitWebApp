@@ -27,7 +27,9 @@
                                                       <tr data-id="<%= faq._id %>">
                                                         <td><%= index + 1 %></td>
                                                         <td class="title-cell"><%= faq.title %></td>
-                                                        <td class="description-cell"><%= faq.description %></td>
+                                                        <td class="description-cell" data-bs-toggle="tooltip" title="<%= faq.description %>">
+                                                          <%= faq.description.length > 100 ? faq.description.substring(0, 100) + '...' : faq.description %>
+                                                        </td>
                                                         <td class="status-cell">
                                                           <% if (faq.status === 1) { %>
                                                             <span class="badge badge-success-inverse">Enabled</span>

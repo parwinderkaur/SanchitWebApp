@@ -1,7 +1,7 @@
 const express = require("express");
 const multer = require('multer');
 const router = express.Router();
-const upload = multer({ dest: 'public/uploads/' });
+const upload = multer({ dest: 'public' });
 
 const frontendController = require("../controllers/frontendController");
 const adminController = require("../controllers/adminController");
@@ -17,18 +17,17 @@ function isAuthenticated(req, res, next) {
 // ✅ Frontend Routes
 router.get("/", frontendController.home);
 router.get("/services", frontendController.services);
-router.get("/service-detail", frontendController.serviceDetail);
+router.get("/service-detail/:id", frontendController.serviceDetail);
 router.get("/contact", frontendController.contact);
+router.post("/api/contact", frontendController.contactApi);
 router.get("/blogs", frontendController.blog);
-router.get("/blog-detail", frontendController.blogDetails);
+router.get("/blog-detail/:id", frontendController.blogDetails);
 
 // ✅ Frontend API Routes
 router.get("/api/faqs", frontendController.getAllFaqs);
 router.get("/api/testimonials", frontendController.getAllTestimonials);
 router.get("/api/blogs", frontendController.getAllBlogs);
-router.get("/api/blogs/:id", frontendController.getBlogById);
 router.get("/api/services", frontendController.getAllServices);
-router.get("/api/services/:id", frontendController.getServiceById);
 router.get("/api/home-sections", frontendController.getAllHomeSections);
 router.get("/api/settings", frontendController.getAllSettings);
 

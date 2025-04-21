@@ -385,7 +385,7 @@ var MyScroll = "";
             .attr("disabled", "disabled");
           var data = $(this).serialize();
           $.ajax({
-            url: "./assets/mail/contact.php",
+            url: `/api/contact`,
             type: "post",
             dataType: "json",
             data: data,
@@ -394,7 +394,7 @@ var MyScroll = "";
               _self.find('button[type="submit"]').removeAttr("disabled");
               if (data.success) {
                 document.getElementById("message").innerHTML =
-                  "<h5 class='color-primary mt-16 mb-16'>Email Sent Successfully</h5>";
+                  "<h5 class='color-primary mt-16 mb-16'>Enquiry submitted successfully! Our team will get back you sortly.</h5>";
               } else {
                 document.getElementById("message").innerHTML =
                   "<h5 class='color-primary mt-16 mb-16'>There is an error</h5>";

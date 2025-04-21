@@ -14,48 +14,27 @@
         <section class="blog-detail-sec mb-80">
             <div class="container-fluid">
                 <div class="row row-gap-4">
-                    <div class="col-lg-12 col-md-8 order-md-2 order-1">
-                        <div>
-                            <img class="br-12 w-100 mb-16" src="/media/blogs/blog-detail-img-1.jpg" alt="">
-                            <h5 class="fw-400 mb-16">Decorating your home is a personal journey, and finding the right
-                                style
-                                can feel like a creative adventure. From vibrant setting walls that.</h5>
-                            <p class="mb-16">Decorating your home is a personal journey, and finding the right style can
-                                feel like a creative adventure. From vibrant setting walls that showcase your
-                                personality to
-                                minimalist designs that focus on simplicity, there’s a decor style for everyone. In this
-                                post, we’ll explore different decor aesthetics to help you find the look that best fits
-                                your
-                                taste, lifestyle, and space.</p>
-                            <h6 class="fw-400 mb-12">1. &nbsp; setting Walls</h6>
-                            <p class="mb-16">
-                                Decorating your home is a personal journey, and finding the right style can feel like a
-                                creative adventure. From vibrant setting walls that showcase your personality to
-                                minimalist
-                                designs that focus on simplicity, there’s a decor style for everyone. In this post,
-                                we’ll
-                                explore different decor aesthetics to help you find the look that best fits your taste,
-                                lifestyle, and space.
-                            </p>
-                            <h6 class="fw-400 mb-12">2. &nbsp; Minimalism</h6>
-                            <p class="mb-16">Minimalist decor focuses on simplicity, clean lines, and a clutter-free
-                                environment. We’ll discuss how to achieve this look with thoughtful furniture choices,
-                                neutral colors, and functional yet stylish pieces that make your space feel calm and
-                                open.
-                            </p>
-                            <h6 class="fw-400 mb-12">3. &nbsp; Bohemian Vibes</h6>
-                            <p class="mb-16">If you’re drawn to eclectic patterns, natural textures, and a mix of
-                                colors, bohemian decor might be your match. Learn how to incorporate layered textiles,
-                                plants, and vintage finds to create a relaxed, lived-in atmosphere.</p>
-                            <h6 class="fw-400 mb-12">4. &nbsp; Modern Rustic</h6>
-                            <p class="mb-16">For those who love a blend of modern design and rustic charm, we’ll dive
-                                into how to use wood, metal, and earthy colors to create a warm yet refined space.</p>
-                            <h6 class="fw-400 mb-12">5. &nbsp; Classic Elegance</h6>
-                            <p class="">A timeless and elegant approach to decor brings a sense of luxury with rich
-                                textures, ornate details, and sophisticated color palettes. We’ll cover ways to achieve
-                                a refined, classic look without overwhelming the space.</p>
+                    <div class="col-lg-12 order-md-2 order-1">
+                        <div class="text-center mb-48">
+                            <h3 class="fw-400 mb-16"><%= blog.title %></h3>
+                            <p class=" mb-4p" style="text-align: end;"><%= moment(blog.dateOfPost).format("DD MMM YYYY") %></p>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <img class="br-12 w-100 mb-16" src="<%= blog.image %>" alt="">
+                            </div>
+                            <div class="col-md-8">
+                                <p class="mb-16" ><%= blog.description %></p>
+                                <a 
+                                href="<%= settings.whatsappLink %>?text=Hi, I'm interested in your blog of <%= blog.title %> want to know more about it." 
+                                target="_blank" 
+                                class="btn btn-success btn-sm"  >
+                                Ask more!
+                                </a>
+                            </div>
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </section>
