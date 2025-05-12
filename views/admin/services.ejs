@@ -11,6 +11,9 @@
                                             <div class="page-title mb-2 mb-sm-0">
                                                 <h1 style="text-align: center;">Service List</h1>
                                             </div>
+                                            <div style="text-align: end;">
+                                              <button class="btn btn-success mb-3" id="addNewBtn">+ Add New</button>
+                                            </div>
                                             <div class="container-fluid">
                                                 <table id="serviceTable" class="table table-bordered">
                                                   <thead>
@@ -29,11 +32,11 @@
                                                       <tr data-id="<%= service._id %>">
                                                         <td><%= index + 1 %></td>
                                                         <td class="title-cell"><%= service.title %></td>
-                                                        <td class="description-cell" data-bs-toggle="tooltip" title="<%= service.description %>">
-                                                          <%= service.description.length > 100 ? service.description.substring(0, 100) + '...' : service.description %>
-                                                        </td>                                                             
+                                                        <td class="description-cell" data-bs-toggle="tooltip" title="<%= service.description %>" data-description="<%= service.description ? service.description.replace(/"/g, '&quot;') : '' %>">
+                                                            <%= service.description && service.description.length > 100 ? service.description.substring(0, 100) + '...' : service.description %>
+                                                        </td>
                                                        <td class="price-cell"><%= service.price %></td>
-                                                        <td class="image-cell"><img src="<%= service.image %>" width="80"></td>
+                                                        <td class="image-cell"><img src="<%= service.image ? service.image : '/media/services/default.png' %>" width="80"></td>
                                                         <td class="status-cell">
                                                           <% if (service.status === 1) { %>
                                                             <span class="badge badge-success-inverse">Enabled</span>
@@ -43,13 +46,13 @@
                                                         </td>
                                                         <td>
                                                           <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editServiceModal">Edit</button>
+                                                          <button class="btn btn-sm btn-danger btn-delete" data-id="<%= service._id %>">Delete</button>
                                                         </td>
                                                       </tr>
                                                     <% }); %>
                                                   </tbody>
                                                 </table>
                                               </div>
-                                              
                                         </div>
                                     </div>
                                 </div>
@@ -60,7 +63,7 @@
                     <!-- end container-fluid -->
                 </div>
                 <!-- end app-main -->
-                <div class="modal fade" id="editServiceModal" tabindex="-1" aria-labelledby="editServiceLabel" aria-hidden="true">
+                  <div class="modal fade" id="editServiceModal" tabindex="-1" aria-labelledby="editServiceLabel" data-bs-backdrop="static"  data-bs-keyboard="false">
                     <div class="modal-dialog modal-dialog-centered">
                       <div class="modal-content">
                         <form id="editServiceForm" enctype="multipart/form-data">
@@ -72,15 +75,15 @@
                             <input type="hidden" id="editServiceId">
                             <div class="mb-3">
                               <label>Title</label>
-                              <input type="text" id="editServiceTitle" class="form-control" required>
+                              <input type="text" id="editServiceTitle"  name="title" class="form-control" required>
                             </div>
                             <div class="mb-3">
                               <label>Description</label>
-                              <textarea id="editServiceDescription" class="form-control" required></textarea>
+                              <textarea id="editServiceDescription" name="description" class="form-control" required></textarea>
                             </div>
                             <div class="mb-3">
                               <label>Price</label>
-                              <input type="number" id="editServicePrice" class="form-control" required>
+                              <input type="number" name="price" id="editServicePrice" class="form-control" required>
                             </div>
                             <div class="mb-3">
                               <label>Image</label>
@@ -89,7 +92,7 @@
                             </div>
                             <div class="mb-3">
                               <label>Status</label>
-                              <select id="editServiceStatus" class="form-control">
+                              <select id="editServiceStatus" name="status" class="form-control">
                                 <option value="1">Enabled</option>
                                 <option value="0">Disabled</option>
                               </select>
@@ -102,58 +105,102 @@
                       </div>
                     </div>
                   </div>
-                  <script>
-                    document.addEventListener("DOMContentLoaded", () => {
-                      document.querySelectorAll("#serviceTable .btn-primary").forEach(btn => {
-                        btn.addEventListener("click", function () {
-                          const row = this.closest("tr");
-                          const id = row.dataset.id;
-                          const title = row.querySelector(".title-cell").textContent.trim();
-                          const description = row.querySelector(".description-cell").textContent.trim();
-                          const price = row.querySelector(".price-cell").textContent.trim();
-                          const image = row.querySelector(".image-cell img").getAttribute("src");
-                          const statusText = row.querySelector(".status-cell").textContent.trim();
-                    
-                          document.getElementById("editServiceId").value = id;
-                          document.getElementById("editServiceTitle").value = title;
-                          document.getElementById("editServiceDescription").value = description;
-                          document.getElementById("editServicePrice").value = price;
-                          document.getElementById("previewServiceImage").src = image;
-                          document.getElementById("editServiceStatus").value = statusText === "Enabled" ? "1" : "0";
-                        });
-                      });
-                    
-                      document.getElementById("editServiceForm").addEventListener("submit", async function (e) {
-                        e.preventDefault();
-                        const id = document.getElementById("editServiceId").value;
-                    
-                        const formData = new FormData();
-                        formData.append("title", document.getElementById("editServiceTitle").value);
-                        formData.append("description", document.getElementById("editServiceDescription").value);
-                        formData.append("price", document.getElementById("editServicePrice").value);
-                        formData.append("status", document.getElementById("editServiceStatus").value);
-                    
-                        const imageFile = document.getElementById("editServiceImage").files[0];
-                        if (imageFile) formData.append("image", imageFile);
-                    
-                        const modalEl = document.getElementById("editServiceModal");
-                        const modal = bootstrap.Modal.getInstance(modalEl);
-                        modal.hide();
-                    
-                        const res = await fetch(`/api/services/${id}`, {
-                          method: "POST",
-                          body: formData
-                        });
-                    
-                        const json = await res.json();
-                        const flash = document.createElement("div");
-                        flash.className = `alert alert-${json.success ? "success" : "danger"} flash-msg`;
-                        flash.innerText = json.message;
-                        document.querySelector(".container-fluid").prepend(flash);
-                        setTimeout(() => {
-                          flash.remove();
-                          if (json.success) location.reload();
-                        }, 1500);
-                      });
-                    });
-                    </script>                                      
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const modalEl = document.getElementById("editServiceModal");
+  const modal = new bootstrap.Modal(modalEl, {
+    backdrop: "static",
+    keyboard: false
+  });
+
+  // Populate form for editing
+  document.querySelectorAll("#serviceTable .btn-primary").forEach(btn => {
+    btn.addEventListener("click", function () {
+      const row = this.closest("tr");
+      const id = row.dataset.id;
+      const title = row.querySelector(".title-cell").textContent.trim();
+      const description = row.querySelector(".description-cell").getAttribute("data-description").trim();
+      const price = row.querySelector(".price-cell").textContent.trim();
+      const image = row.querySelector(".image-cell img").getAttribute("src");
+      const statusText = row.querySelector(".status-cell").textContent.trim();
+
+      document.querySelector(".modal-title").textContent = "Edit Service";
+      document.getElementById("editServiceId").value = id;
+      document.getElementById("editServiceTitle").value = title;
+      document.getElementById("editServiceDescription").value = description;
+      document.getElementById("editServicePrice").value = price;
+      document.getElementById("previewServiceImage").src = image;
+      document.getElementById("editServiceStatus").value = statusText === "Enabled" ? "1" : "0";
+
+      modal.show();
+    });
+  });
+
+  // Handle Add New
+  document.getElementById("addNewBtn").addEventListener("click", () => {
+    document.querySelector(".modal-title").textContent = "Add Service";
+    document.getElementById("editServiceForm").reset();
+    document.getElementById("editServiceId").value = "";
+    document.getElementById("previewServiceImage").src = "";
+    modal.show();
+  });
+
+  // Submit form
+  document.getElementById("editServiceForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const id = document.getElementById("editServiceId").value;
+    const formData = new FormData(this);
+    if (id) formData.append('id', String(id));
+    document.activeElement?.blur(); // Fix aria-hidden warning
+
+    const modalEl = document.getElementById("editServiceModal");
+    const modal = bootstrap.Modal.getInstance(modalEl);
+    modal.hide(); // Hide modal properly
+
+    const res = await fetch("/api/services", {
+      method: "POST",
+      body: formData
+    });
+
+    const json = await res.json();
+    const flash = document.createElement("div");
+    flash.className = `alert alert-${json.success ? "success" : "danger"} flash-msg`;
+    flash.innerText = json.message;
+    document.querySelector(".container-fluid").prepend(flash);
+
+    if (json.success){
+      setTimeout(() => {
+        flash.remove();
+        location.reload();
+      }, 1500);
+    }
+  });
+  document.querySelectorAll(".btn-delete").forEach(button => {
+    button.addEventListener("click", async function () {
+      const id = this.dataset.id;
+      if (confirm("Are you sure you want to delete this item?")) {
+        try {
+          const res = await fetch("/api/services/delete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id })
+          });
+
+          const result = await res.json();
+          const flash = document.createElement("div");
+          flash.className = `alert alert-${result.success ? "success" : "danger"} flash-msg`;
+          flash.innerText = result.message;
+          document.querySelector(".container-fluid").prepend(flash);
+          setTimeout(() => {
+            flash.remove();
+            if (result.success) location.reload();
+          }, 1500);
+        } catch (error) {
+          alert("Something went wrong.");
+        }
+      }
+    });
+  });
+});
+</script>                                    

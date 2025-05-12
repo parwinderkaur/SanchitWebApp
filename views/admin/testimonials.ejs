@@ -11,6 +11,9 @@
                                             <div class="page-title mb-2 mb-sm-0">
                                                 <h1 style="text-align: center;">Testimonials List</h1>
                                             </div>
+                                            <div style="text-align: end;">
+                                              <button class="btn btn-success mb-3" id="addNewBtn">+ Add New</button>
+                                            </div>
                                             <div class="container-fluid">
                                                 <table id="testimonialTable" class="table table-bordered">
                                                   <thead>
@@ -27,7 +30,7 @@
                                                       <tr data-id="<%= testimonial._id %>">
                                                         <td><%= index + 1 %></td>
                                                         <td class="user-cell"><%= testimonial.userName %></td>
-                                                        <td class="description-cell" data-bs-toggle="tooltip" title="<%= testimonial.description %>">
+                                                        <td class="description-cell" data-bs-toggle="tooltip" title="<%= testimonial.description %>"  data-description="<%= testimonial.description ? testimonial.description.replace(/"/g, '&quot;') : '' %>">
                                                           <%= testimonial.description.length > 100 ? testimonial.description.substring(0, 100) + '...' : testimonial.description %>
                                                         </td>                                                                                                              
                                                         <td class="status-cell">
@@ -39,6 +42,7 @@
                                                         </td>
                                                         <td>
                                                           <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editTestimonialModal">Edit</button>
+                                                          <button class="btn btn-sm btn-danger btn-delete" data-id="<%= testimonial._id %>">Delete</button>
                                                         </td>
                                                       </tr>
                                                     <% }); %>
@@ -56,7 +60,7 @@
                     <!-- end container-fluid -->
                 </div>
                 <!-- end app-main -->
-                <div class="modal fade" id="editTestimonialModal" tabindex="-1" aria-labelledby="editTestimonialLabel" aria-hidden="true">
+                <div class="modal fade" id="editTestimonialModal" tabindex="-1" aria-labelledby="editTestimonialLabel" data-bs-backdrop="static"  data-bs-keyboard="false">
                     <div class="modal-dialog modal-dialog-centered">
                       <div class="modal-content">
                         <form id="editTestimonialForm">
@@ -91,12 +95,17 @@
                   </div>
                   <script>
                     document.addEventListener("DOMContentLoaded", () => {
+                                          const modalEl = document.getElementById("editTestimonialModal");
+  const modal = new bootstrap.Modal(modalEl, {
+    backdrop: "static",
+    keyboard: false
+  });
                       document.querySelectorAll("#testimonialTable .btn-primary").forEach(btn => {
                         btn.addEventListener("click", function () {
                           const row = this.closest("tr");
                           const id = row.dataset.id;
                           const userName = row.querySelector(".user-cell").textContent.trim();
-                          const description = row.querySelector(".description-cell").textContent.trim();
+                          const description = row.querySelector(".description-cell").getAttribute("data-description").trim();
                           const statusText = row.querySelector(".status-cell").textContent.trim();
                     
                           document.getElementById("editTestimonialId").value = id;
@@ -105,25 +114,30 @@
                           document.getElementById("editTestimonialStatus").value = statusText === "Enabled" ? "1" : "0";
                         });
                       });
+                      document.getElementById("addNewBtn").addEventListener("click", () => {
+                      document.querySelector(".modal-title").textContent = "Add Testimonial";
+                      document.getElementById("editTestimonialForm").reset();
+                      document.getElementById("editTestimonialId").value = "";
+                      modal.show();
+                    });
                     
                       document.getElementById("editTestimonialForm").addEventListener("submit", async function (e) {
                         e.preventDefault();
                         const id = document.getElementById("editTestimonialId").value;
                     
-                        const formData = {
-                          userName: document.getElementById("editUserName").value,
-                          description: document.getElementById("editTestimonialDescription").value,
-                          status: document.getElementById("editTestimonialStatus").value
-                        };
-                    
+                        const formData = new FormData();
+                        formData.append("userName", document.getElementById("editUserName").value);
+                        formData.append("description", document.getElementById("editTestimonialDescription").value);
+                        formData.append("status", document.getElementById("editTestimonialStatus").value);
+                        if (id) formData.append("id", String(id));
+
                         const modalEl = document.getElementById('editTestimonialModal');
                         const modal = bootstrap.Modal.getInstance(modalEl);
                         modal.hide();
                     
-                        const res = await fetch(`/api/testimonials/${id}`, {
+                        const res = await fetch(`/api/testimonials`, {
                           method: "POST",
-                          headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify(formData)
+                          body: formData
                         });
                     
                         const json = await res.json();
@@ -136,6 +150,32 @@
                           if (json.success) location.reload();
                         }, 1500);
                       });
+                      document.querySelectorAll(".btn-delete").forEach(button => {
+    button.addEventListener("click", async function () {
+      const id = this.dataset.id;
+      if (confirm("Are you sure you want to delete this item?")) {
+        try {
+          const res = await fetch("/api/testimonials/delete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id })
+          });
+
+          const result = await res.json();
+          const flash = document.createElement("div");
+          flash.className = `alert alert-${result.success ? "success" : "danger"} flash-msg`;
+          flash.innerText = result.message;
+          document.querySelector(".container-fluid").prepend(flash);
+          setTimeout(() => {
+            flash.remove();
+            if (result.success) location.reload();
+          }, 1500);
+        } catch (error) {
+          alert("Something went wrong.");
+        }
+      }
+    });
+  });
                     });
                     </script>
                                       

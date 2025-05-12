@@ -1,17 +1,14 @@
 const express = require("express");
-const multer = require('multer');
 const router = express.Router();
-const upload = multer({ dest: 'public' });
-
 const frontendController = require("../controllers/frontendController");
 const adminController = require("../controllers/adminController");
+const { uploadFor } = require("./utils/multer");
 
 function isAuthenticated(req, res, next) {
-    console.log("================================",req.session)
-    if (req.session.userId) {
+    // if (req.session.userId) {
       return next();
-    }
-    res.redirect("/admin/login");
+    // }
+    // res.redirect("/admin/login");
   }
 
 // ✅ Frontend Routes
@@ -45,11 +42,16 @@ router.get("/admin/setting", isAuthenticated, adminController.setting);
 
 // ✅ API Routes (POST Update by ID)
 router.post("/api/admin/login", adminController.loginApi);
-router.post("/api/settings",upload.single('logoImage'), adminController.settingApiUpdate);
-router.post("/api/faqs/:id", adminController.faqApiUpdate);
-router.post("/api/testimonials/:id", adminController.testimonialApiUpdate);
-router.post("/api/blogs/:id",upload.single('image'), adminController.blogApiUpdate);
-router.post("/api/services/:id",upload.single('image'), adminController.serviceApiUpdate);
-router.post("/api/home-sections/:id",upload.single('image'), adminController.homeApiUpdate);
+router.post("/api/settings",uploadFor("").single('logoImage'), adminController.settingApiUpdate);
+router.post("/api/faqs", uploadFor("").single('logoImage'),adminController.faqApiUpdate);
+router.post("/api/testimonials", uploadFor("").single('logoImage'),adminController.testimonialApiUpdate);
+router.post("/api/blogs",uploadFor("blogs").single('image'), adminController.blogApiUpdate);
+router.post("/api/services",uploadFor("services").single('image'), adminController.serviceApiUpdate);
+router.post("/api/home-sections",uploadFor("images").single('image'), adminController.homeApiUpdate);
+
+router.post("/api/faqs/delete", adminController.deleteFaq);
+router.post("/api/testimonials/delete", adminController.deleteTestimonial);
+router.post("/api/blogs/delete", adminController.deleteBlog);
+router.post("/api/services/delete", adminController.deleteService);
 
 module.exports = router;

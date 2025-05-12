@@ -7,11 +7,23 @@
                         <h3 class="text-center mb-4">Site Settings</h3>
                         <div class="container-fluid">
                             <form id="settingsForm" enctype="multipart/form-data">
-                                <input type="hidden" name="id" value="<%= records._id %>" />
+                              <input type="hidden" name="id" value="<%= records._id %>" />
                               <div class="row">
                                 <div class="col-md-6 mb-3">
                                   <label>Primary Color</label>
                                   <input type="color" name="primaryColor" class="form-control" value="<%= records.primaryColor %>" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                  <label>Secondary Color</label>
+                                  <input type="color" name="secondaryColor" class="form-control" value="<%= records.secondaryColor %>" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                  <label>Tertiary Color</label>
+                                  <input type="color" name="tertiaryColor" class="form-control" value="<%= records.tertiaryColor %>" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                  <label>Text Color</label>
+                                  <input type="color" name="textColor" class="form-control" value="<%= records.textColor %>" />
                                 </div>
                                 <div class="col-md-6 mb-3">
                                   <label>Accent Color</label>
@@ -25,6 +37,8 @@
                                   <label>Text Light Color</label>
                                   <input type="color" name="textLightColor" class="form-control" value="<%= records.textLightColor %>" />
                                 </div>
+
+                                <!-- Contact Info -->
                                 <div class="col-md-6 mb-3">
                                   <label>Email</label>
                                   <input type="email" name="email" class="form-control" value="<%= records.email %>" />
@@ -37,6 +51,8 @@
                                   <label>Address</label>
                                   <textarea name="address" class="form-control"><%= records.address %></textarea>
                                 </div>
+
+                                <!-- Social -->
                                 <div class="col-md-6 mb-3">
                                   <label>Instagram</label>
                                   <input type="text" name="instagramLink" class="form-control" value="<%= records.instagramLink %>" />
@@ -53,19 +69,25 @@
                                   <label>What We Provide</label>
                                   <input type="text" name="whatWeProvide" class="form-control" value="<%= records.whatWeProvide %>" />
                                 </div>
+
+                                <!-- Logo -->
                                 <div class="col-md-6 mb-3">
                                   <label>Logo Image</label><br>
                                   <% if (records.logoImage) { %>
                                     <img src="<%= records.logoImage %>" class="mt-2" width="120" />
-                                  <% } %>
+                                    <input type="file" name="logoImage" class="form-control" />
+                                  <% }else { %>
                                   <br><br>
-                                  <input type="file" name="logoImage" class="form-control" />
+                                  <input type="file" name="logoImage" required class="form-control" />
+                                  <% } %>
                                 </div>
+
                                 <div class="col-12 text-center">
                                   <button type="submit" class="btn btn-success mt-3">Save Settings</button>
                                 </div>
                               </div>
                             </form>
+
                         </div>                          
                     </div>
                 </div>
@@ -79,7 +101,6 @@
     
       const form = e.target;
       const formData = new FormData(form);
-    console.log("========formData=========",formData)
       const res = await fetch(`/api/settings`, {
         method: "POST",
         body: formData
@@ -98,4 +119,3 @@
       }, 1500);
     });
     </script>
-    

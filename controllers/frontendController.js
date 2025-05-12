@@ -14,14 +14,10 @@ module.exports = {
     try {
       const [settings, sections, faqs, testimonials] = await Promise.all([
         Setting.findOne().lean(),
-        Home.find({ status: 1 }).lean(),
+        Home.find({ status: 1 }).sort({ paragraphNo: 1 }).lean(),
         Faq.find({ status: 1 }).lean(),
         Testimonial.find({ status: 1 }).lean()
       ]);
-      console.log("===settings===========",settings)
-      console.log("===sections===========",sections)
-      console.log("===faqs===========",faqs)
-      console.log("===settings===========",settings)
       // Home.find({ status: 1 }).lean(),
       res.render("index", {
         layout: 'layout/master',
@@ -62,7 +58,7 @@ module.exports = {
       const [settings, service, servicesList] = await Promise.all([
         Setting.findOne().lean(),
         Service.findById(req.params.id).lean(),
-        Service.find({ _id: { $ne: req.params.id } }).lean()
+        Service.find({_id: { $ne: req.params.id },  status: 1 }).lean()
     ]);
     
       if (!service) {
@@ -102,9 +98,7 @@ module.exports = {
         contact: req.body.phone,
         message: req.body.message,
       };
-  
-      console.log("====contactApi===================", data);
-  
+    
       const savedContact = await Contact.create(data);
   
       if (!savedContact) {

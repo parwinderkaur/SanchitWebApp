@@ -11,6 +11,9 @@
                                             <div class="page-title mb-2 mb-sm-0">
                                                 <h1 style="text-align: center;">Frequently Asked Questions</h1>
                                             </div>
+                                            <div style="text-align: end;">
+                                              <button class="btn btn-success mb-3" id="addNewBtn">+ Add New</button>
+                                            </div>
                                             <div class="container-fluid">
                                                 <table id="faqTable" class="table table-bordered">
                                                   <thead>
@@ -27,7 +30,7 @@
                                                       <tr data-id="<%= faq._id %>">
                                                         <td><%= index + 1 %></td>
                                                         <td class="title-cell"><%= faq.title %></td>
-                                                        <td class="description-cell" data-bs-toggle="tooltip" title="<%= faq.description %>">
+                                                        <td class="description-cell" data-bs-toggle="tooltip" title="<%= faq.description %>"  data-description="<%= faq.description ? faq.description.replace(/"/g, '&quot;') : '' %>">
                                                           <%= faq.description.length > 100 ? faq.description.substring(0, 100) + '...' : faq.description %>
                                                         </td>
                                                         <td class="status-cell">
@@ -39,6 +42,7 @@
                                                         </td>
                                                         <td>
                                                           <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editFaqModal">Edit</button>
+                                                          <button class="btn btn-sm btn-danger btn-delete" data-id="<%= faq._id %>">Delete</button>
                                                         </td>
                                                       </tr>
                                                     <% }); %>
@@ -55,7 +59,7 @@
                     <!-- end container-fluid -->
                 </div>
                 <!-- end app-main -->
-                <div class="modal fade" id="editFaqModal" tabindex="-1" aria-labelledby="editFaqLabel" aria-hidden="true">
+                <div class="modal fade" id="editFaqModal" tabindex="-1" aria-labelledby="editFaqLabel" data-bs-backdrop="static"  data-bs-keyboard="false">
                     <div class="modal-dialog modal-dialog-centered">
                       <div class="modal-content">
                         <form id="editFaqForm">
@@ -90,12 +94,17 @@
                   </div>
                   <script>
                     document.addEventListener("DOMContentLoaded", () => {
+                      const modalEl = document.getElementById("editFaqModal");
+  const modal = new bootstrap.Modal(modalEl, {
+    backdrop: "static",
+    keyboard: false
+  });
                       document.querySelectorAll("#faqTable .btn-primary").forEach(btn => {
                         btn.addEventListener("click", function () {
                           const row = this.closest("tr");
                           const id = row.dataset.id;
                           const title = row.querySelector(".title-cell").textContent.trim();
-                          const description = row.querySelector(".description-cell").textContent.trim();
+                          const description = row.querySelector(".description-cell").getAttribute("data-description").trim();
                           const statusText = row.querySelector(".status-cell").textContent.trim();
                     
                           document.getElementById("editFaqId").value = id;
@@ -104,25 +113,29 @@
                           document.getElementById("editFaqStatus").value = statusText === "Enabled" ? "1" : "0";
                         });
                       });
+                      document.getElementById("addNewBtn").addEventListener("click", () => {
+                      document.querySelector(".modal-title").textContent = "Add FAQ";
+                      document.getElementById("editFaqForm").reset();
+                      document.getElementById("editFaqId").value = "";
+                      modal.show();
+                    });
                     
                       document.getElementById("editFaqForm").addEventListener("submit", async function (e) {
                         e.preventDefault();
                         const id = document.getElementById("editFaqId").value;
                     
-                        const formData = {
-                          title: document.getElementById("editFaqTitle").value,
-                          description: document.getElementById("editFaqDescription").value,
-                          status: document.getElementById("editFaqStatus").value
-                        };
-                    
+                        const formData = new FormData();
+                        if (id) formData.append('id', String(id));
+                        formData.append("title", document.getElementById("editFaqTitle").value);
+                        formData.append("description", document.getElementById("editFaqDescription").value);
+                        formData.append("status", document.getElementById("editFaqStatus").value);
                         const modalEl = document.getElementById('editFaqModal');
                         const modal = bootstrap.Modal.getInstance(modalEl);
                         modal.hide();
                     
-                        const res = await fetch(`/api/faqs/${id}`, {
+                        const res = await fetch(`/api/faqs`, {
                           method: "POST",
-                          headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify(formData)
+                          body: formData
                         });
                     
                         const json = await res.json();
@@ -135,6 +148,32 @@
                           if (json.success) location.reload();
                         }, 1500);
                       });
+                      document.querySelectorAll(".btn-delete").forEach(button => {
+    button.addEventListener("click", async function () {
+      const id = this.dataset.id;
+      if (confirm("Are you sure you want to delete this item?")) {
+        try {
+          const res = await fetch("/api/faqs/delete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id })
+          });
+
+          const result = await res.json();
+          const flash = document.createElement("div");
+          flash.className = `alert alert-${result.success ? "success" : "danger"} flash-msg`;
+          flash.innerText = result.message;
+          document.querySelector(".container-fluid").prepend(flash);
+          setTimeout(() => {
+            flash.remove();
+            if (result.success) location.reload();
+          }, 1500);
+        } catch (error) {
+          alert("Something went wrong.");
+        }
+      }
+    });
+  });
                     });
                     </script>
                                       

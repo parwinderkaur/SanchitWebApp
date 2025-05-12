@@ -13115,13 +13115,16 @@ var checkin = $('.range-from').datepicker({
     });
 
 })(window, document, window.jQuery);
-(function(window, document, $, undefined){
+// (function(window, document, $, undefined){
 
-    $(function(){
-        jQuery(".loader").fadeOut('slow');
-    });
+//     $(function(){
+//         jQuery(".loader").fadeOut('slow');
+//     });
 
-})(window, document, window.jQuery);
+// })(window, document, window.jQuery);
+window.addEventListener('load', () => {
+  $(".loader").fadeOut('slow');
+});
 (function(window, document, $, undefined){
 
     $(function(){

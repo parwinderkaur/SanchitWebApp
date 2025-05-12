@@ -11,7 +11,7 @@ const settingSchema = new mongoose.Schema({
   textLightColor: String,
   email: String,
   number: String,
-address: String,
+  address: String,
   instagramLink: String,
   whatsappLink: String,
   facebookLink: String,
